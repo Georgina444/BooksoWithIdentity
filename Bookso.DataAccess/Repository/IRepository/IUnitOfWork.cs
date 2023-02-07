@@ -13,6 +13,8 @@ namespace Bookso.DataAccess.Repository.IRepository
         IProductRepositroy Product { get; }
         IShoppingCartRepository ShoppingCart { get; }
         IApplicationUserRepository ApplicationUser { get; }
+        IOrderDetailRepositroy OrderDetail { get; }
+        IOrderHeaderRepository OrderHeader { get; }
         void Save();
     }
 }
