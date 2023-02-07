@@ -16,10 +16,14 @@ namespace Bookso.DataAccess.Repository
             Category = new CategoryRepository(_db);
             CoverType = new CoverTypeRepository(_db);
             Product = new ProductRepository(_db);
+            ApplicationUser = new ApplicationUserRepository(_db);
+            ShoppingCart = new ShoppingCartRepository(_db);
         }
         public ICategoryRepository Category { get; private set; }
         public ICoverTypeRepository CoverType { get; private set; }
         public IProductRepositroy Product { get; private set; }
+        public IShoppingCartRepository ShoppingCart { get; private set; }   
+        public IApplicationUserRepository ApplicationUser { get; private set; }
 
         public void Save()
         {
