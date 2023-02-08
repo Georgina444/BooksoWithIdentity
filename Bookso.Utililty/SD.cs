@@ -18,6 +18,7 @@ namespace Bookso.Utililty
         public const string StatusCancelled = "Cancelled";
         public const string StatusRefunded = "Refunded";
 
+        public const string PaymentStatusDelayedPayment = "Delayed";
         public const string PaymentStatusPending = "Pending";
         public const string PaymentStatusApproved= "Approved";
         public const string PaymentStatusRejected = "Pending";

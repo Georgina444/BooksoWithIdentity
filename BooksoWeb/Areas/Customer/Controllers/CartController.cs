@@ -165,13 +165,9 @@ namespace BooksoWeb.Areas.Customer.Controllers
 			Response.Headers.Add("Location", session.Url);
 			return new StatusCodeResult(303);
 
-			//// clear the shopping cart after an order has been made
-			//_unitOfWork.ShoppingCart.RemoveRange(ShoppingCartVM.ListCart);
-   //         _unitOfWork.Save();
-
-
-   //         return RedirectToAction("Index", "Home");  
-		}
+            //// clear the shopping cart after an order has been made
+            
+        }
 
         public IActionResult OrderConfirmation(int id)
         {
