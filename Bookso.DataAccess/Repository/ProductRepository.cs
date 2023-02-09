@@ -17,12 +17,16 @@ namespace Bookso.DataAccess.Repository
             _db = db;
         }
 
-
-/*        public override void Attach(Product obj)
+        public void Remove(Product entity)
         {
-            _db.Attach(obj);
+            _db.Products.Remove(entity);
         }
-*/
+
+        //public void Attach(Product obj)
+        //{
+        //    _db.Attach(obj);
+        //}
+
         public void Update(Product obj)
         {
             // _db.Products.Update(obj);   updates all the other properties even if only one is being edited

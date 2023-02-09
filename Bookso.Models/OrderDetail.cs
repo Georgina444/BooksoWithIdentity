@@ -15,6 +15,9 @@ namespace Bookso.Models
 		public int OrderId { get; set; }
 		[ForeignKey("OrderId")]
 		[ValidateNever]
+		public string? OrderStatus { get; set; }
+		[ForeignKey("OrderStatus")]
+		[ValidateNever]
 		public OrderHeader OrderHeader { get; set; }
 
 		[Required]
@@ -24,5 +27,6 @@ namespace Bookso.Models
 		public Product Product { get; set; }
 		public int Count { get; set; }
 		public double Price { get; set; }
-	}
+ 
+    }
 }

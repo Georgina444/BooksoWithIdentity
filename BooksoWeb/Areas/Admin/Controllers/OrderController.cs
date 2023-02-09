@@ -43,7 +43,7 @@ namespace BooksoWeb.Areas.Admin.Controllers
             return View(OrderVM);
         }
 
-        //[Route("Admin/Order/UpdateOrderDetail")]
+        [Route("Admin/Order/UpdateOrderDetail")]
         [HttpPost]
         [Authorize(Roles =SD.Role_Admin)]
         [ValidateAntiForgeryToken]

@@ -31,6 +31,7 @@ public class ProductController : Controller
     }
 
     //GET
+    [Route("Admin/Product/Upsert")]
     public IActionResult Upsert(int? productid)
     {
         ProductVM productVM = new()
@@ -64,6 +65,7 @@ public class ProductController : Controller
     }
 
     //POST
+    [Route("Admin/Product/Upsert")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult Upsert(ProductVM obj, IFormFile? file)
@@ -113,6 +115,7 @@ public class ProductController : Controller
 
 
     #region API CALLS
+    [Route("Admin/Product/GetAll")]
     [HttpGet]
     public IActionResult GetAll()
     {
@@ -121,10 +124,16 @@ public class ProductController : Controller
     }
 
     //POST
+    [Route("Admin/Product/Delete")]
     [HttpDelete]
-    public IActionResult Delete(int? id)
+    public IActionResult Delete(int? productId)
     {
-        var obj = _unitOfWork.Product.GetFirstOrDefault(u => u.ProductId == id);
+        if (_unitOfWork == null)
+        {
+            return Json(new { success = false, message = "UnitOfWork instance is not initialized." });
+        }
+
+        var obj = _unitOfWork.Product.GetFirstOrDefault(u => u.ProductId == productId);
         if (obj == null)
         {
             return Json(new { success = false, message = "Error while deleting" });
@@ -139,7 +148,6 @@ public class ProductController : Controller
         _unitOfWork.Product.Remove(obj);
         _unitOfWork.Save();
         return Json(new { success = true, message = "Delete Successful" });
-
     }
     #endregion
 }

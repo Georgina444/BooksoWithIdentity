@@ -1,4 +1,5 @@
 ﻿using Bookso.DataAccess.Repository.IRepository;
+using Bookso.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -84,9 +85,11 @@ namespace Bookso.DataAccess.Repository
             dbSet.RemoveRange(entity);
         }
 
-/*        public void Attach(T entity)
+        public void Attach(T entity)
         {
             dbSet.Attach(entity);
-        }*/
+        }
+
+
     }
 }

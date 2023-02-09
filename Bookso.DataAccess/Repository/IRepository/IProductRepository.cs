@@ -11,5 +11,6 @@ namespace Bookso.DataAccess.Repository.IRepository
     {
         //void Attach(Product obj);
         void Update(Product obj);
+
     }
 }

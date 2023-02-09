@@ -1,6 +1,6 @@
 ﻿var dataTable;
 
-$(document).ready(function() { 
+$(document).ready(function () {
     loadDataTable();
 });
 
@@ -8,15 +8,15 @@ function loadDataTable() {
     dataTable = $('#tblData').DataTable({
         "ajax": {
             "url": "/Admin/Product/GetAll",
-            "type":"GET"
+            "type": "GET"
         },
         "columns": [
             { "data": "productId", "width": "10%" },
-            { "data": "title", "width":"10%"},
-            { "data": "isbn", "width": "10%"},
-            { "data": "price", "width": "10%"},
-            { "data": "author", "width": "10%"},
-            { "data": "category.name", "width": "10%"},
+            { "data": "title", "width": "10%" },
+            { "data": "isbn", "width": "10%" },
+            { "data": "price", "width": "10%" },
+            { "data": "author", "width": "10%" },
+            { "data": "category.name", "width": "10%" },
             {
                 "data": "productId",
                 "render": function (data) {     // data is the id of the product that the user selects
@@ -24,7 +24,7 @@ function loadDataTable() {
                         <div class="w-55 btn-btn-group" role = "group" >
                             <a href="/Admin/Product/Upsert?productId=${data}"
                                 class="btn btn-secondary mx-2"> <i class="bi bi-pen"></i> Edit </a>
-                            <a onClick=Delete('/Admin/Product/Delete/${data}')
+                            <a onClick=Delete("/Admin/Product/Delete/?productId=${data}")
                            class="btn btn-danger mx-2"><i class="bi bi-trash"></i> Delete </a>
                     </div >
                     `
@@ -32,7 +32,7 @@ function loadDataTable() {
                 "width": "16%"
             },
         ]
-        });   
+    });
 }  
 
 function Delete(url) {

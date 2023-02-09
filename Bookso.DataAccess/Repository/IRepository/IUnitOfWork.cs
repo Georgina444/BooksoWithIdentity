@@ -16,5 +16,6 @@ namespace Bookso.DataAccess.Repository.IRepository
         IOrderDetailRepositroy OrderDetail { get; }
         IOrderHeaderRepository OrderHeader { get; }
         void Save();
+
     }
 }

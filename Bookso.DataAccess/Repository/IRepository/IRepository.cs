@@ -18,7 +18,7 @@ namespace Bookso.DataAccess.Repository.IRepository
         void Add(T entity);
         void Remove(T entity);
         void RemoveRange(IEnumerable<T> entity);   // in case you want to remove more than one entity
-        /*void Attach(Product obj);*/
+        void Attach(T entity);
         // we are receiving those entities as IEnumerable which is a collection of entities
 
 
