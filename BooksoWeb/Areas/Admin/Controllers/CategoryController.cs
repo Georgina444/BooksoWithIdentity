@@ -2,9 +2,11 @@
 using Bookso.DataAccess;
 using Microsoft.AspNetCore.Mvc;
 using Bookso.DataAccess.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
+using Bookso.Utililty;
 
 namespace BooksoWeb.Areas.Admin.Controllers;
-
+[Authorize(Roles =SD.Role_Admin)]
 public class CategoryController : Controller
 {
     private readonly IUnitOfWork _unitOfWork;

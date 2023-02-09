@@ -1,9 +1,13 @@
 ﻿using Bookso.DataAccess.Repository.IRepository;
 using Bookso.Models;
+using Bookso.Utililty;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BooksoWeb.Areas.Admin.Controllers
-{
+namespace BooksoWeb.Areas.Admin.Controllers;
+[Authorize(Roles =SD.Role_Admin)]
+
+
     public class CoverTypeController : Controller
     {
 
@@ -112,7 +116,7 @@ namespace BooksoWeb.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
     }
-}
+
 
 
 // 1.2.1 We need an implementation of the ApplicationDbContext (where the connection to DB is already made)

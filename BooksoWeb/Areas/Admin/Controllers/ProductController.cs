@@ -5,8 +5,11 @@ using Bookso.DataAccess.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using Bookso.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Bookso.Utililty;
 
 namespace BooksoWeb.Areas.Admin.Controllers;
+[Authorize(Roles = SD.Role_Admin)]
 
 public class ProductController : Controller
 {

@@ -1,5 +1,6 @@
 ﻿using Bookso.DataAccess.Repository.IRepository;
 using Bookso.Models;
+using Bookso.Utililty;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -53,12 +54,15 @@ namespace BooksoWeb.Areas.Customer.Controllers
             if(cartFromDb == null)
             {
                 _unitOfWork.ShoppingCart.Add(shoppingCart);
+                _unitOfWork.Save();
+                HttpContext.Session.SetInt32(SD.SessionCart,
+                _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == claim.Value).ToList().Count);
             }
             else
             {
                 _unitOfWork.ShoppingCart.IncrementCount(cartFromDb, shoppingCart.Count);
+                _unitOfWork.Save();
             }
-            _unitOfWork.Save();
 
             return RedirectToAction(nameof(Index));
         }

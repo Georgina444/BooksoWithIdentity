@@ -171,17 +171,20 @@ namespace BooksoWeb.Areas.Customer.Controllers
         public IActionResult OrderConfirmation(int id)
         {
             OrderHeader orderHeader = _unitOfWork.OrderHeader.GetFirstOrDefault(u => u.Id == id);
-            // getting the existing session we have
-			var service = new SessionService();
-			Session session = service.Get(orderHeader.SessionId);
-
-            // chack Stripe status
-            if (session.PaymentStatus.ToLower() == "paid")
+            if(orderHeader.PaymentStatus != SD.PaymentStatusDelayedPayment)
             {
-                _unitOfWork.OrderHeader.UpdateStatus(id,SD.StatusApproved,SD.PaymentStatusApproved);
-                _unitOfWork.Save();
-            }
+	     		var service = new SessionService();
+		    	Session session = service.Get(orderHeader.SessionId);
+                 // chack Stripe status
+                if (session.PaymentStatus.ToLower() == "paid")
+                 {
+                    _unitOfWork.OrderHeader.UpdateStripePaymentID(id,orderHeader.SessionId,session.PaymentIntentId);
+                    _unitOfWork.OrderHeader.UpdateStatus(id,SD.StatusApproved,SD.PaymentStatusApproved);
+                    _unitOfWork.Save();
+                 }
 
+            }
+            // getting the existing session we have
             List<ShoppingCart> shoppingCarts = _unitOfWork.ShoppingCart.GetAll(u=>u.ApplicationUserId==
             orderHeader.ApplicationUserId).ToList();
             _unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
@@ -204,6 +207,8 @@ namespace BooksoWeb.Areas.Customer.Controllers
             if (cart.Count <= 1)
             {
                 _unitOfWork.ShoppingCart.Remove(cart);
+                var count = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == cart.ApplicationUserId).ToList().Count-1;
+                HttpContext.Session.SetInt32(SD.SessionCart, count);
             }
             else
             {
@@ -218,6 +223,9 @@ namespace BooksoWeb.Areas.Customer.Controllers
 			var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(u => u.Id == cartId);
 			_unitOfWork.ShoppingCart.Remove(cart);
             _unitOfWork.Save();
+            var count = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == cart.ApplicationUserId).ToList().Count;
+            HttpContext.Session.SetInt32(SD.SessionCart, count);
+
 			return RedirectToAction("Index");
 		}
 
