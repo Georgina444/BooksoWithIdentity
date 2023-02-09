@@ -40,6 +40,7 @@ namespace Bookso.Models
         // [ForeignKey("CategoryID")]
         [ValidateNever]
         public Category Category { get; set; }    
+        // public List<Category> Categories  ????
 
         [Required]
         [Display(Name ="Cover Type")]
