@@ -19,14 +19,14 @@ $(document).ready(function () {
 function loadDataTable(status) {
     dataTable = $('#tblData').DataTable({
         "ajax": {
-            "url": "/Admin/Order/GetAll?status=" + status
-            //"type":"GET"
+            "url": "/Admin/Order/GetAll?status=" + status,
+            "type":"GET"
         },
         "columns": [
             { "data": "id", "width": "10%" },
             { "data": "name", "width":"10%"},
             { "data": "phoneNumber", "width": "10%"},
-           // { "data": "ApplicationUser.email", "width": "10%"},
+            { "data": "applicationUser.email", "width": "10%"},
             { "data": "orderStatus", "width": "10%"},
             { "data": "orderTotal", "width": "10%"},
             {
@@ -35,7 +35,7 @@ function loadDataTable(status) {
                     return `
                         <div class="w-35 btn-btn-group text-center" role = "group" >
                             <a href="/Admin/Order/Details?orderId=${data}"
-                                class="btn btn-secondary mx-2"> <i class="bi bi-pen"></i> Details </a>
+                            class="btn btn-secondary mx-2"> <i class="bi bi-pen"></i>Details</a>
                     </div >
                     `
                 },

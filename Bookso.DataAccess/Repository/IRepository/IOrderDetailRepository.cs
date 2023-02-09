@@ -9,7 +9,6 @@ namespace Bookso.DataAccess.Repository.IRepository
 {
     public interface IOrderDetailRepositroy : IRepository<OrderDetail>
     {
-      
         void Update(OrderDetail obj);
     }
 }

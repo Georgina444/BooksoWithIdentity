@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BooksoWeb.Migrations
 {
     /// <inheritdoc />
-    public partial class AddOrderHeaderAndOrderDetailToDb : Migration
+    public partial class AddOrderHeaderOrderDetails : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,8 +17,7 @@ namespace BooksoWeb.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ApplicationUserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ApplcationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ShippingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     OrderTotal = table.Column<double>(type: "float", nullable: false),
@@ -40,10 +39,11 @@ namespace BooksoWeb.Migrations
                 {
                     table.PrimaryKey("PK_OrderHeaders", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrderHeaders_AspNetUsers_ApplcationUserId",
-                        column: x => x.ApplcationUserId,
+                        name: "FK_OrderHeaders_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -85,9 +85,9 @@ namespace BooksoWeb.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderHeaders_ApplcationUserId",
+                name: "IX_OrderHeaders_ApplicationUserId",
                 table: "OrderHeaders",
-                column: "ApplcationUserId");
+                column: "ApplicationUserId");
         }
 
         /// <inheritdoc />

@@ -14,7 +14,7 @@ namespace Bookso.Models
 	{
 		public int Id { get; set; }
 		public string ApplicationUserId { get; set; }
-		[ForeignKey("ApplcationUserId")]
+		[ForeignKey("ApplicationUserId")]
 		[ValidateNever]
 		public ApplicationUser ApplicationUser { get; set; }
 		[Required]
@@ -23,6 +23,7 @@ namespace Bookso.Models
 		public double OrderTotal { get; set; }
 		public string? OrderStatus { get; set; }
 		public string? PaymentStatus { get; set; }
+		public string? TrackingNumber { get; set; }
 		public string? Carrier { get; set; }
 		public DateTime PaymentDate { get; set; }
 		public DateTime PaymentDueDate { get; set; }

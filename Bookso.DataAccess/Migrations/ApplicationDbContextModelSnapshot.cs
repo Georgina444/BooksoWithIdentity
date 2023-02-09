@@ -99,12 +99,9 @@ namespace BooksoWeb.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ApplcationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("ApplicationUserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Carrier")
                         .HasColumnType("nvarchar(max)");
@@ -162,7 +159,7 @@ namespace BooksoWeb.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplcationUserId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("OrderHeaders");
                 });
@@ -498,7 +495,9 @@ namespace BooksoWeb.Migrations
                 {
                     b.HasOne("Bookso.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("ApplcationUserId");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ApplicationUser");
                 });

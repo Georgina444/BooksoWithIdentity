@@ -10,5 +10,6 @@ namespace Bookso.Models.ViewModels
 	{
 		public OrderHeader OrderHeader { get; set; }
 		public IEnumerable<OrderDetail> OrderDetail { get; set; }   // an order can have multiple details -> enumerable
+
 	}
 }

@@ -14,49 +14,95 @@ using System.Security.Claims;
 namespace BooksoWeb.Areas.Admin.Controllers
 {
     [Authorize]
-	public class OrderController : Controller
-	{
-		private readonly IUnitOfWork _unitOfWork;
+    public class OrderController : Controller
+    {
+        private readonly IUnitOfWork _unitOfWork;
         [BindProperty]
         public OrderVM OrderVM { get; set; }
+        public OrderController(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
 
 
         public IActionResult Index()
-		{
-			return View();
-		}
+        {
+            return View();
+        }
 
+        [Route("Admin/Order/Details")]
         public IActionResult Details(int orderId)
         {
             OrderVM = new OrderVM()
             {
                 OrderHeader = _unitOfWork.OrderHeader.GetFirstOrDefault(u => u.Id == orderId, includeProperties: "ApplicationUser"),
                 OrderDetail = _unitOfWork.OrderDetail.GetAll(u => u.OrderId == orderId, includeProperties: "Product"),
-            };
+			};
             return View(OrderVM);
         }
 
-
-        [Route("/Admin/Order/GetAll")]
-		#region API CALLS
-		[HttpGet]
-		public IActionResult GetAll(string status)   // gets order list
+        //[Route("Admin/Order/UpdateOrderDetail")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+		public IActionResult UpdateOrderDetail()
 		{
-			IEnumerable<OrderHeader> orderHeaders;
-
-            if (User.IsInRole(SD.Role_Admin))
+            // 1 - retreive the order header from db 
+            var orderHeaderFromDb = _unitOfWork.OrderHeader.GetFirstOrDefault(u => u.Id == OrderVM.OrderHeader.Id,tracked:false);
+            orderHeaderFromDb.Name = OrderVM.OrderHeader.Name; 
+            orderHeaderFromDb.PhoneNumber = OrderVM.OrderHeader.PhoneNumber; 
+            orderHeaderFromDb.StreetAddress = OrderVM.OrderHeader.StreetAddress; 
+            orderHeaderFromDb.City = OrderVM.OrderHeader.City; 
+            orderHeaderFromDb.State = OrderVM.OrderHeader.State; 
+            orderHeaderFromDb.PostalCode = OrderVM.OrderHeader.PostalCode;
+			if (OrderVM.OrderHeader.Carrier != null)
+			{
+				orderHeaderFromDb.Carrier = OrderVM.OrderHeader.Carrier;
+			}
+            if (OrderVM.OrderHeader.TrackingNumber != null)
             {
-            orderHeaders = _unitOfWork.OrderHeader.GetAll(includeProperties:"ApplicationUser");
+                orderHeaderFromDb.TrackingNumber = OrderVM.OrderHeader.TrackingNumber;
+            }
+            _unitOfWork.OrderHeader.Update(orderHeaderFromDb);
+			_unitOfWork.Save();
+			TempData["Success"] = "Order Details Updated Successfully.";
+			return RedirectToAction("Details", "Order", new { orderId = orderHeaderFromDb.Id });
+		}
+
+
+		[Route("/Admin/Order/GetAll")]
+        #region API CALLS
+        [HttpGet]
+        public IActionResult GetAll(string status)   // gets order list
+        {
+            IEnumerable<OrderHeader> orderHeaders;
+            if (User == null)
+            {
+                return BadRequest("User object is null");
+            }
+
+            if (User?.Identity?.IsAuthenticated == true)
+            {
+                if (User.IsInRole(SD.Role_Admin))
+                {
+                    if (_unitOfWork == null)
+                    {
+                        return BadRequest("Unit of work object is null");
+                    }
+
+                    orderHeaders = _unitOfWork.OrderHeader.GetAll(includeProperties: "ApplicationUser");
+                }
+                else
+                {
+                    var claimsIdentity = (ClaimsIdentity)User.Identity;
+                    var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+                    orderHeaders = _unitOfWork.OrderHeader.GetAll(u => u.ApplicationUserId == claim.Value, includeProperties: "ApplicationUser");
+                }
             }
             else
             {
-                var claimsIdentity = (ClaimsIdentity)User.Identity;
-                var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-                orderHeaders = _unitOfWork.OrderHeader.GetAll(u=>u.ApplicationUserId==claim.Value,includeProperties:"ApplicationUser");
-
+                // Handle the case where the User object is null
+                return BadRequest("User is not authenticated");
             }
-
-            // orderHeaders = _unitOfWork.OrderHeader.GetAll().Include(x => x.ApplicationUser);
 
             switch (status)
             {
@@ -77,8 +123,9 @@ namespace BooksoWeb.Areas.Admin.Controllers
             }
 
             return Json(new { data = orderHeaders });
-		}
-		#endregion
-	}
+        }
+        #endregion
+    }
 
 }
+
